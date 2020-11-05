@@ -61,13 +61,13 @@ int createTrie(Node *z) {
          ss << line;
          ss >> cmd;
          if (cmd == "edge") {
-            // implement
             ss >> edge >> num;
             Node *n = createNode(z, edge, num, "");
             (z->children).push_back(n);
             cout << "Added " << i << "th child with edge " << edge << " successfully" << endl;
+            // Create the subtrie for this child
+            createTrie(n);
          } else if (cmd == "leaf") {
-            // implement
             ss >> edge >> label;
             Node *n = createNode(z, edge, 0, label);
             (z->children).push_back(n);
@@ -80,11 +80,6 @@ int createTrie(Node *z) {
          cout << "Input terminated unexpectedly. Expected " << i << "th child" << endl;
          return 1;
       }
-   }
-
-   // Create the subtries of each child
-   for (int i = 0; i < numChildren; i++) {
-      createTrie((z->children)[i]);
    }
    
    return 0;
