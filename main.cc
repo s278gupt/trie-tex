@@ -1,3 +1,4 @@
+#include <fstream>
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -15,8 +16,15 @@ struct Node {
 Node *createNode(Node *parent, string edge, int numChildren, string label) {
    Node *n = new Node;
    n->parent = parent;
+   if (edge == "$") {
+      edge = "\\$";
+   }
    n->edge = edge;
    n->numChildren = numChildren;
+   if ((!label.empty()) && (label.back() == '$')) {
+      label.pop_back();
+      label.append("\\$");
+   }
    n->label = label;
    return n;
 }
@@ -27,16 +35,6 @@ void deleteNode(Node *z) {
          deleteNode(child);
       }
       delete z;
-   }
-}
-
-void printNodes(Node *z) {
-   for (int i = 0; i < z->numChildren; i++) {
-      cout << (z->children)[i]->label << endl; 
-   }
-
-   for (int i = 0; i < z->numChildren; i++) {
-      printNodes((z->children)[i]); 
    }
 }
 
@@ -51,7 +49,6 @@ void deleteTrie(Trie *t) {
 
 int createTrie(Node *z) {
    int numChildren = z->numChildren;
-   cout << "number of children: " << numChildren << endl;
 
    // Instantiate all the vector of children nodes
    for (int i = 1; i <= numChildren; i++) {
@@ -66,7 +63,7 @@ int createTrie(Node *z) {
          if (cmd == "edge") {
             // implement
             ss >> edge >> num;
-            Node *n = createNode(z, edge, num, "internal");
+            Node *n = createNode(z, edge, num, "");
             (z->children).push_back(n);
             cout << "Added " << i << "th child with edge " << edge << " successfully" << endl;
          } else if (cmd == "leaf") {
@@ -93,12 +90,51 @@ int createTrie(Node *z) {
    return 0;
 }
 
-void printTrie(Trie *t) {
-   if (t->root != NULL) {
-      cout << (t->root)->label << endl;
-      printNodes(t->root);
+void printNodes(ofstream &file, Node *z) {
+   if (z == NULL) return;
+   
+   if ((z->label).empty()) {
+      // z is an internal node
+      file <<  "child{node[solid node]{}" << endl;
+   } else {
+      // z is a leaf
+      file <<  "child{node[leaf node]{" << z->label << "}" << endl;
    }
+
+   // print children
+   for (int i = 0; i < z->numChildren; i++) {
+      printNodes(file, (z->children)[i]);
+   }
+
+   file << "edge from parent node[triee]{$" << z->edge << "$}" << endl;
+   file << "}" << endl;
 }
+
+void printLatex(Trie *t) {
+   ofstream file;
+   string filename = "example.txt";
+   file.open(filename);
+   cout << "Writing to " << filename << endl;
+   
+   file << "\\begin{center}" << endl;
+   file << "\\begin{tikzpicture}[" << endl;
+   file << " scale=0.6,font=\\footnotesize," << endl;
+   file << " triee/.style={draw=none,fill=white,inner sep=1pt,font=\\scriptsize}" << endl;
+   file << "]" << endl;
+   
+   if (t->root != NULL) {
+      file << "\\node(r)[solid node]{}" << endl;
+      for (int i = 0; i < (t->root)->numChildren; i++) {
+         printNodes(file, ((t->root)->children)[i]);
+      }
+   }
+
+   file << ";" << endl;
+   file << "\\end{tikzpicture}" << endl;
+   file << "\\end{center}" << endl;
+   file.close();
+}
+
 
 int main() {
    Trie *t = new Trie;
@@ -113,7 +149,7 @@ int main() {
    ss >> cmd;
    if (cmd == "root") {
       ss >> numChildren;
-      t->root = createNode(NULL, "", numChildren, "root");
+      t->root = createNode(NULL, "", numChildren, "");
       cout << "Added root successfully" << endl;
    } else {
       cout << "Input must start with root command. See `trie-tex help` for more." << endl;
@@ -123,8 +159,8 @@ int main() {
    // Create the rest of the trie
    int success = createTrie(t->root);
    if (success == 0) {
-      // Print trie
-      printTrie(t);
+      // Print Latex
+      printLatex(t);
    }
 
    deleteTrie(t);
