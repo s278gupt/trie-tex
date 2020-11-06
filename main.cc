@@ -36,7 +36,7 @@ int main() {
 
    // Filename to save tex
    string filename = "trie_tex.txt";
-   cout << "Enter filename to save latex in (default is trie_tex.txt):";
+   cout << "Enter filename to save latex in (default is trie_tex.txt): ";
    getline(cin, filename);
    cout << "Latex trie will be saved as " << filename << " in the current directory." << endl;
 

@@ -1,3 +1,5 @@
-example.txt
+trie_text.txt
 sample.txt
-main
+triex
+*.o
+*.d

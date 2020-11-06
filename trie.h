@@ -1,6 +1,6 @@
 #ifndef _TRIE_
 #define _TRIE_
-class Node;
+struct Node;
 
 struct Trie {
    Node *root;
