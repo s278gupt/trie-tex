@@ -35,9 +35,10 @@ int main() {
    Trie *t = new Trie;
 
    // Filename to save tex
-   string filename = "trie_tex.txt";
+   string filename;
    cout << "Enter filename to save latex in (default is trie_tex.txt): ";
    getline(cin, filename);
+   if (filename.empty()) filename = "trie_tex.txt";
    cout << "Latex trie will be saved as " << filename << " in the current directory." << endl;
 
    string line;
@@ -50,20 +51,29 @@ int main() {
    ss >> cmd;
    if (cmd == "root") {
       ss >> numChildren;
+      if (numChildren == 0) {
+         cout << "Root must have at least one child." << endl;
+         delete t;
+         return 1;
+      }
       t->root = createNode(NULL, "", numChildren, "");
       cout << "Added root successfully" << endl;
    } else {
       cout << "Input must start with root command. See github documentation for more." << endl;
+      delete t;
       return 1;
    }
 
    // Create the rest of the trie
-   int success = createTrie(t->root);
-   if (success == 0) {
-      // Print Latex
+   try {
+      createTrie(t->root);
+      // Print latex form to file
       printLatex(t, filename);
+      deleteTrie(t);
+      return 0;
+   } catch (TrieError &e) {
+      cout << e.what() << endl;
+      deleteTrie(t);
+      return 1;
    }
-
-   deleteTrie(t);
-   return 0;
 }

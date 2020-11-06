@@ -4,12 +4,12 @@
 #include "node.h"
 #include "trie.h"
 
-void deleteTrie(Trie *t) {
-   deleteNode(t->root);
-   delete t;
-}
+TrieError::TrieError(std::string message):
+   message(std::move(message)) {}
 
-int createTrie(Node *z) {
+const std::string &TrieError::what() const { return message; }
+
+void createTrie(Node *z) {
    int numChildren = z->numChildren;
 
    // Instantiate all the vector of children nodes
@@ -24,6 +24,7 @@ int createTrie(Node *z) {
          ss >> cmd;
          if (cmd == "edge") {
             ss >> edge >> num;
+            if (num == 0) throw TrieError("Edges must have at least one child. Otherwise make it a leaf.");
             Node *n = createNode(z, edge, num, "");
             (z->children).push_back(n);
             cout << "Added " << i << "th child with edge " << edge << " successfully" << endl;
@@ -31,18 +32,21 @@ int createTrie(Node *z) {
             createTrie(n);
          } else if (cmd == "leaf") {
             ss >> edge >> label;
+            if (label.empty()) throw TrieError("Leaf must have an edge and a label.");
             Node *n = createNode(z, edge, 0, label);
             (z->children).push_back(n);
             cout << "Added leaf " << label << " successfully" << endl;
          } else {
-            cout << "Unexpected command " << cmd << ". Expected `edge` or `leaf`." << endl;
-            return 1;
+            throw TrieError("Unexpected command " + cmd + ". Expected `edge` or `leaf`.");
          }
       } else {
-         cout << "Input terminated unexpectedly. Expected " << i << "th child" << endl;
-         return 1;
+         int missingChildren = numChildren - i + 1;
+         throw TrieError("Input terminated unexpectedly. Expected " + to_string(missingChildren) + " more children.");
       }
    }
-   
-   return 0;
+}
+
+void deleteTrie(Trie *t) {
+   deleteNode(t->root);
+   delete t;
 }
