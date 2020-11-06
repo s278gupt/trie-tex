@@ -1,0 +1,90 @@
+\begin{center}
+\begin{tikzpicture}[
+ scale=0.6,font=\footnotesize,
+ triee/.style={draw=none,fill=white,inner sep=1pt,font=\scriptsize}
+]
+\node(r)[solid node]{}
+child{node[solid node]{}
+child{node[solid node]{}
+child{node[solid node]{}
+child{node[leaf node]{000\$}
+edge from parent node[triee]{$\$$}
+}
+edge from parent node[triee]{$0$}
+}
+child{node[leaf node]{00\$}
+edge from parent node[triee]{$\$$}
+}
+child{node[solid node]{}
+child{node[leaf node]{001\$}
+edge from parent node[triee]{$\$$}
+}
+edge from parent node[triee]{$1$}
+}
+edge from parent node[triee]{$0$}
+}
+edge from parent node[triee]{$0$}
+}
+child{node[solid node]{}
+child{node[solid node]{}
+child{node[solid node]{}
+child{node[solid node]{}
+child{node[leaf node]{1001\$}
+edge from parent node[triee]{$\$$}
+}
+edge from parent node[triee]{$1$}
+}
+edge from parent node[triee]{$0$}
+}
+child{node[leaf node]{10\$}
+edge from parent node[triee]{$\$$}
+}
+child{node[solid node]{}
+child{node[solid node]{}
+child{node[solid node]{}
+child{node[leaf node]{10100\$}
+edge from parent node[triee]{$\$$}
+}
+edge from parent node[triee]{$0$}
+}
+edge from parent node[triee]{$0$}
+}
+child{node[leaf node]{101\$}
+edge from parent node[triee]{$\$$}
+}
+child{node[solid node]{}
+child{node[solid node]{}
+child{node[leaf node]{10110\$}
+edge from parent node[triee]{$\$$}
+}
+edge from parent node[triee]{$0$}
+}
+edge from parent node[triee]{$1$}
+}
+edge from parent node[triee]{$1$}
+}
+edge from parent node[triee]{$0$}
+}
+child{node[leaf node]{1\$}
+edge from parent node[triee]{$\$$}
+}
+child{node[solid node]{}
+child{node[leaf node]{11\$}
+edge from parent node[triee]{$\$$}
+}
+child{node[solid node]{}
+child{node[solid node]{}
+child{node[leaf node]{1111\$}
+edge from parent node[triee]{$\$$}
+}
+edge from parent node[triee]{$1$}
+}
+edge from parent node[triee]{$1$}
+}
+edge from parent node[triee]{$1$}
+}
+edge from parent node[triee]{$1$}
+}
+;
+\end{tikzpicture}
+\end{center}

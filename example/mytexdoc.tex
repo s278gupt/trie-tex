@@ -1,0 +1,120 @@
+\documentclass[12pt]{article}
+\usepackage{tikz}
+
+\begin{document}
+
+\tikzset{
+    subtree/.style={
+        isosceles triangle,
+        shape border rotate=90,
+        anchor=apex,
+        minimum width=25pt
+    },
+    to subtree/.style={
+        edge from parent path={(\tikzparentnode) -- (\tikzchildnode.north)}
+    },
+    solid node/.style={ circle,draw,inner sep=1.5,fill=black },
+    leaf node/.style={ rectangle,draw,inner sep=1.5,fill=white },
+    internal node/.style={
+        inner sep=1pt,draw,circle,fill=black!15,minimum size=12pt,
+    },
+}
+
+Actual:
+\begin{center}
+\begin{tikzpicture}[
+ scale=0.6,font=\footnotesize,
+ triee/.style={draw=none,fill=white,inner sep=1pt,font=\scriptsize},
+ level 1/.style={level distance=13mm,sibling distance=90mm},
+ level 2/.style={level distance=15mm,sibling distance=38mm},
+ level 3/.style={level distance=15mm,sibling distance=20mm},
+ level 4/.style={level distance=15mm,sibling distance=20mm}
+]
+\node(r)[solid node]{}
+    child{node[solid node]{}
+        child{node[solid node]{}
+            child{node[solid node]{}
+                child{node[leaf node]{000\$}
+                edge from parent node[triee]{$\$$}
+                }
+            edge from parent node[triee]{$0$}
+            }
+            child{node[leaf node]{00\$}
+            edge from parent node[triee]{$\$$}
+            }
+            child{node[solid node]{}
+                child{node[leaf node]{001\$}
+                edge from parent node[triee]{$\$$}
+                }
+            edge from parent node[triee]{$1$}
+            }
+        edge from parent node[triee]{$0$}
+        }
+    edge from parent node[triee]{$0$}
+    }
+    child{node[solid node]{}
+        child{node[solid node]{}
+            child{node[solid node]{}
+                child{node[solid node]{}
+                    child{node[leaf node]{1001\$}
+                    edge from parent node[triee]{$\$$}
+                    }
+                edge from parent node[triee]{$1$}
+                }
+                edge from parent node[triee]{$0$}
+            }
+            child{node[leaf node]{10\$}
+            edge from parent node[triee]{$\$$}
+            }
+            child{node[solid node]{}
+                child{node[solid node]{}
+                    child{node[solid node]{}
+                        child{node[leaf node]{10100\$}
+                        edge from parent node[triee]{$\$$}
+                        }
+                    edge from parent node[triee]{$0$}
+                    }
+                    edge from parent node[triee]{$0$}
+                }
+                child{node[leaf node]{101\$}
+                edge from parent node[triee]{$\$$}
+                }
+                child{node[solid node]{}
+                    child{node[solid node]{}
+                        child{node[leaf node]{10110\$}
+                        edge from parent node[triee]{$\$$}
+                        }
+                    edge from parent node[triee]{$0$}
+                    }
+                    edge from parent node[triee]{$1$}
+                }
+            edge from parent node[triee]{$1$}
+            }
+        edge from parent node[triee]{$0$}
+        }
+        child{node[leaf node]{1\$}
+        edge from parent node[triee]{$\$$}
+        }
+        child{node[solid node]{}
+            child{node[leaf node]{11\$}
+            edge from parent node[triee]{$\$$}
+            }
+            child{node[solid node]{}
+                child{node[solid node]{}
+                    child{node[leaf node]{1111\$}
+                    edge from parent node[triee]{$\$$}
+                    }
+                edge from parent node[triee]{$1$}
+                }
+            edge from parent node[triee]{$1$}
+            }
+        edge from parent node[triee]{$1$}
+        }
+    edge from parent node[triee]{$1$}
+    }
+    ;
+\end{tikzpicture}
+\end{center}
+
+
+\end{document}
